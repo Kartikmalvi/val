@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? ❤️</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff8fa3;
+            --accent: #fff0f3;
+            --dark: #590d22;
+            --glass: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Particles Container */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Floating Hearts BG */
+        .bg-heart {
+            position: fixed;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 2rem;
+            animation: floatHeart linear infinite;
+            z-index: 0;
+            user-select: none;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(110vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        /* Sections */
+        .screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+            text-align: center;
+            transition: opacity 0.8s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3 {
+            font-family: 'Dancing Script', cursive;
+            text-shadow: var(--text-shadow);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Initial Name Screen */
+        #name-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        .input-container {
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 1rem;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Outfit', sans-serif;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: white;
+        }
+
+        button {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hero Section */
+        .hero-text {
+            font-size: 1.5rem;
+            min-height: 1.8em;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background-color: white;
+            animation: blink 1s infinite;
+            vertical-align: bottom;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Memory Section */
+        #memory-section {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            margin: 2rem 0;
+        }
+
+        .memory-card {
+            padding: 1rem;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .memory-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .placeholder-img {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        /* Proposal Section */
+        .proposal-buttons {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            position: relative;
+            justify-content: center;
+            align-items: center;
+            min-height: 80px;
+        }
+
+        .btn-yes {
+            background: #ff004f;
+            color: white;
+            box-shadow: 0 0 20px #ff004f80;
+        }
+
+        .btn-no {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            position: relative;
+            /* for absolute movement */
+        }
+
+        /* Animations */
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+
+            15% {
+                transform: scale(1.3);
+            }
+
+            30% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.15);
+            }
+
+            60% {
+                transform: scale(1);
+            }
+        }
+
+        .heart-pulse {
+            animation: heartbeat 1.5s infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 0, 79, 0.8));
+        }
+
+        /* Reply Sequence */
+        #final-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s ease;
+        }
+
+        #final-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .big-heart {
+            font-size: 8rem;
+            margin-bottom: 2rem;
+            color: #ff004f;
+            display: none;
+        }
+
+        .final-text {
+            font-family: 'Dancing Script', cursive;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s, transform 1s;
+        }
+
+        .big-text {
+            font-size: 4rem;
+            color: #ff8fa3;
+            margin-bottom: 1rem;
+        }
+
+        .sub-text {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            max-width: 80%;
+        }
+
+        .footer-line {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 3rem;
+        }
+
+        /* Confetti */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1500;
+            pointer-events: none;
+        }
+
+        footer {
+            padding: 2rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: auto;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Elements -->
+    <div id="particles"></div>
+    <div id="floating-hearts-container"></div>
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Step 1: Name Input -->
+    <div id="name-screen" class="screen">
+        <div class="glass-card input-container">
+            <h1>Enter your partner's name ❤️</h1>
+            <input type="text" id="partner-name" placeholder="Name..." autocomplete="off">
+            <button onclick="saveName()">Continue</button>
+        </div>
+    </div>
+
+    <!-- Main Content (Hidden initially) -->
+    <main id="main-content" class="hidden">
+
+        <!-- Hero Section -->
+        <section id="hero" class="screen">
+            <h1 id="hero-title">Hey ... ❤️</h1>
+            <div class="hero-text">
+                <span id="typewriter"></span><span class="cursor"></span>
+            </div>
+            <p class="fade-in scroll-trigger" style="margin-top: 2rem; font-size: 1.4rem;">
+                "From the moment you came into my life, every day feels magical."
+            </p>
+        </section>
+
+        <!-- Memory Section -->
+        <section id="memory-section" class="screen">
+            <h2 class="fade-in scroll-trigger">Some of my favorite memories with you, <span
+                    class="partner-name-display"></span></h2>
+            <div class="memory-grid">
+                <div class="glass-card memory-card fade-in scroll-trigger" style="transition-delay: 0.2s">
+                    <div class="placeholder-img">Photo 1</div>
+                </div>
+                <div class="glass-card memory-card fade-in scroll-trigger" style="transition-delay: 0.4s">
+                    <div class="placeholder-img">Photo 2</div>
+                </div>
+                <div class="glass-card memory-card fade-in scroll-trigger" style="transition-delay: 0.6s">
+                    <div class="placeholder-img">Photo 3</div>
+                </div>
+            </div>
+            <p class="fade-in scroll-trigger">Every moment with you is a treasure I hold close to my heart.</p>
+        </section>
+
+        <!-- Proposal Section -->
+        <section id="proposal" class="screen">
+            <h1 class="fade-in scroll-trigger">Will you be my Valentine, <span class="partner-name-display"></span>?
+            </h1>
+            <p class="fade-in scroll-trigger" style="max-width: 600px;">
+                I don’t need a special day to tell you how much you mean to me. You make my world brighter, my smile
+                wider, and my life infinitely better. Will you make me the happiest person by being my Valentine?
+            </p>
+            <div class="proposal-buttons fade-in scroll-trigger">
+                <button class="btn-yes" onclick="startProposalSequence()">YES 💖</button>
+                <button class="btn-no" onmouseover="moveButton(this)" onclick="moveButton(this)">NO 😅</button>
+            </div>
+        </section>
+
+        <footer>
+            Made with endless love by [Your Name]
+        </footer>
+    </main>
+
+    <!-- Final Reply Overlay -->
+    <div id="final-overlay">
+        <div id="heart-container" class="big-heart">❤️</div>
+        <h1 class="final-text big-text">Yayyyy! ❤️</h1>
+        <p class="final-text sub-text"><span class="partner-name-display"></span>, you just made me the happiest person
+            alive!</p>
+        <p class="final-text footer-line">This is the beginning of many more beautiful memories together 💞</p>
+    </div>
+
+    <script>
+        // --- Variables ---
+        let partnerName = "Love";
+
+        // --- Initialization ---
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.width = Math.random() * 20 + 5 + 'px';
+                p.style.height = p.style.width;
+                p.style.animationDuration = Math.random() * 10 + 5 + 's';
+                p.style.animationDelay = Math.random() * 10 + 's';
+                container.appendChild(p);
+            }
+        }
+
+        function createFloatingHearts() {
+            const container = document.getElementById('floating-hearts-container');
+            setInterval(() => {
+                const h = document.createElement('div');
+                h.classList.add('bg-heart');
+                h.innerHTML = '❤️';
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.animationDuration = Math.random() * 5 + 5 + 's';
+                h.style.fontSize = Math.random() * 2 + 1 + 'rem';
+                container.appendChild(h);
+                setTimeout(() => h.remove(), 10000);
+            }, 500);
+        }
+
+        window.onload = function () {
+            createParticles();
+            createFloatingHearts();
+        };
+
+        // --- Logic ---
+        function saveName() {
+            const input = document.getElementById('partner-name');
+            if (input.value.trim() !== "") {
+                partnerName = input.value.trim();
+                document.querySelectorAll('.partner-name-display').forEach(el => el.textContent = partnerName);
+                document.getElementById('name-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('name-screen').classList.add('hidden');
+                    document.getElementById('main-content').classList.remove('hidden');
+                    initHero();
+                }, 800);
+            }
+        }
+
+        // --- Hero Typewriter ---
+        function initHero() {
+            document.getElementById('hero-title').textContent = `Hey ${partnerName} ❤️`;
+            const text = "I have something very special to ask you...";
+            const el = document.getElementById('typewriter');
+            let i = 0;
+            const interval = setInterval(() => {
+                el.textContent += text.charAt(i);
+                i++;
+                if (i >= text.length) clearInterval(interval);
+            }, 100);
+        }
+
+        // --- Scroll Animations ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // Add visible class if intersecting
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-trigger').forEach(el => observer.observe(el));
+
+        // --- No Button Escape ---
+        function moveButton(btn) {
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            btn.style.position = 'absolute';
+            btn.style.left = `${x}px`;
+            btn.style.top = `${y}px`;
+        }
+
+        // --- Confetti ---
+        const confettiCtx = document.getElementById('confetti-canvas').getContext('2d');
+        let confettiParticles = [];
+
+        function fireConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+            for (let i = 0; i < 300; i++) {
+                confettiParticles.push({
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight / 2,
+                    w: Math.random() * 10 + 5,
+                    h: Math.random() * 10 + 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vx: (Math.random() - 0.5) * 20,
+                    vy: (Math.random() - 0.5) * 20,
+                    life: 200
+                });
+            }
+            requestAnimationFrame(drawConfetti);
+        }
+
+        function drawConfetti() {
+            document.getElementById('confetti-canvas').width = window.innerWidth;
+            document.getElementById('confetti-canvas').height = window.innerHeight;
+            confettiCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+            confettiParticles.forEach((p, index) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life--;
+                p.vy += 0.5; // gravity
+
+                confettiCtx.fillStyle = p.color;
+                confettiCtx.fillRect(p.x, p.y, p.w, p.h);
+
+                if (p.life <= 0) confettiParticles.splice(index, 1);
+            });
+
+            if (confettiParticles.length > 0) requestAnimationFrame(drawConfetti);
+        }
+
+        // --- Proposal Sequence ---
+        function startProposalSequence() {
+            // 1. Hide buttons & Confetti
+            document.querySelector('.proposal-buttons').style.display = 'none';
+            fireConfetti();
+
+            // 2. Music (Placeholder)
+            // Note: Browsers usually block autoplay unless triggered by user interaction (click), which this is.
+            // Replace url with actual file if available.
+            /* 
+            const audio = new Audio('romantic_music.mp3'); 
+            audio.play().catch(e => console.log("Audio play failed (no source):", e));
+            */
+
+            // 3. Darken & Show Overlay
+            const overlay = document.getElementById('final-overlay');
+            setTimeout(() => {
+                overlay.classList.add('active');
+            }, 1000);
+
+            // 4. Heart Beat
+            setTimeout(() => {
+                const heart = document.getElementById('heart-container');
+                heart.style.display = 'block';
+                heart.classList.add('heart-pulse');
+            }, 2000);
+
+            // 5. Text Fade In
+            setTimeout(() => {
+                const texts = document.querySelectorAll('.final-text');
+                texts.forEach((t, i) => {
+                    setTimeout(() => {
+                        t.style.opacity = '1';
+                        t.style.transform = 'translateY(0)';
+                    }, i * 1500);
+                });
+            }, 3000);
+
+            // 6. Intense Heart Rain
+            setInterval(() => {
+                const h = document.createElement('div');
+                h.innerText = '💖';
+                h.style.position = 'fixed';
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.top = '100vh';
+                h.style.fontSize = Math.random() * 3 + 1 + 'rem';
+                h.style.transition = 'all 3s linear';
+                h.style.zIndex = '2001';
+                document.body.appendChild(h);
+
+                setTimeout(() => {
+                    h.style.top = '-100px';
+                }, 100);
+                setTimeout(() => h.remove(), 3000);
+            }, 200);
+        }
+    </script>
+</body>
+
+</html>
