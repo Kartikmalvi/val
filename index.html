@@ -26,7 +26,7 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Dancing Script', cursive;
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -202,8 +202,8 @@
             padding: 1rem;
             border-radius: 12px;
             color: white;
-            font-size: 1.2rem;
-            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-family: 'Dancing Script', cursive;
             text-align: center;
             outline: none;
             transition: all 0.3s ease;
@@ -265,8 +265,9 @@
         }
 
         .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             gap: 2rem;
             width: 100%;
             margin: 2rem 0;
@@ -274,7 +275,8 @@
 
         .memory-card {
             padding: 1rem;
-            height: 350px;
+            width: 300px;
+            height: 300px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -486,6 +488,32 @@
             justify-content: center;
         }
 
+        /* Close Overlay Button */
+        #close-overlay-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            font-size: 1.5rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 2005;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        #close-overlay-btn:hover {
+            background: white;
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
         /* Couple Animation */
         .couple-icon {
             position: fixed;
@@ -538,18 +566,21 @@
             <h1>Let's personalize this ❤️</h1>
 
             <div style="text-align: left; width: 100%;">
-                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Partner's Name:</label>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 1.5rem;">Partner's
+                    Name:</label>
                 <input type="text" id="partner-name" placeholder="Who is this for?" autocomplete="off"
                     style="width: 100%;">
             </div>
 
             <div style="text-align: left; width: 100%;">
-                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Your Name:</label>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 1.5rem;">Your
+                    Name:</label>
                 <input type="text" id="sender-name" placeholder="Who are you?" autocomplete="off" style="width: 100%;">
             </div>
 
             <div style="text-align: left; width: 100%;">
-                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Our Memories (Max 10):</label>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 1.5rem;">Our Memories
+                    (Max 10):</label>
 
                 <label for="photo-upload" class="file-upload-label">
                     📸 Choose Memories
@@ -609,6 +640,7 @@
 
     <!-- Final Reply Overlay -->
     <div id="final-overlay">
+        <button id="close-overlay-btn" onclick="closeOverlay()">✕</button>
         <div id="heart-container" class="big-heart">❤️</div>
         <h1 class="final-text big-text">Yayyyy! ❤️</h1>
         <p class="final-text sub-text"><span class="partner-name-display"></span>, you just made me the happiest person
@@ -847,6 +879,13 @@
             });
 
             if (confettiParticles.length > 0) requestAnimationFrame(drawConfetti);
+        }
+
+        function closeOverlay() {
+            const overlay = document.getElementById('final-overlay');
+            overlay.classList.remove('active');
+            // Show buttons again if desired, or leave them hidden
+            // document.querySelector('.proposal-buttons').style.display = 'flex';
         }
 
         // --- Proposal Sequence ---
