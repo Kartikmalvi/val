@@ -441,11 +441,30 @@
     <canvas id="confetti-canvas"></canvas>
 
     <!-- Step 1: Name Input -->
+    <!-- Step 1: Input Screen -->
     <div id="name-screen" class="screen">
-        <div class="glass-card input-container">
-            <h1>Enter your partner's name ❤️</h1>
-            <input type="text" id="partner-name" placeholder="Name..." autocomplete="off">
-            <button onclick="saveName()">Continue</button>
+        <div class="glass-card input-container" style="max-height: 90vh; overflow-y: auto;">
+            <h1>Let's personalize this ❤️</h1>
+
+            <div style="text-align: left; width: 100%;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Partner's Name:</label>
+                <input type="text" id="partner-name" placeholder="Who is this for?" autocomplete="off"
+                    style="width: 100%;">
+            </div>
+
+            <div style="text-align: left; width: 100%;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Your Name:</label>
+                <input type="text" id="sender-name" placeholder="Who are you?" autocomplete="off" style="width: 100%;">
+            </div>
+
+            <div style="text-align: left; width: 100%;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Our Memories (Max 10):</label>
+                <input type="file" id="photo-upload" multiple accept="image/*" onchange="handleFileSelect(event)"
+                    style="width: 100%; font-size: 1rem;">
+                <p id="file-count" style="font-size: 0.9rem; margin-top: 5px; opacity: 0.8;"></p>
+            </div>
+
+            <button onclick="saveDetails()">Continue</button>
         </div>
     </div>
 
@@ -467,16 +486,8 @@
         <section id="memory-section" class="screen">
             <h2 class="fade-in scroll-trigger">Some of my favorite memories with you, <span
                     class="partner-name-display"></span></h2>
-            <div class="memory-grid">
-                <div class="glass-card memory-card fade-in scroll-trigger" style="transition-delay: 0.2s">
-                    <div class="placeholder-img">Photo 1</div>
-                </div>
-                <div class="glass-card memory-card fade-in scroll-trigger" style="transition-delay: 0.4s">
-                    <div class="placeholder-img">Photo 2</div>
-                </div>
-                <div class="glass-card memory-card fade-in scroll-trigger" style="transition-delay: 0.6s">
-                    <div class="placeholder-img">Photo 3</div>
-                </div>
+            <div class="memory-grid" id="memory-grid">
+                <!-- Dynamic Content Will Be Injected Here -->
             </div>
             <p class="fade-in scroll-trigger">Every moment with you is a treasure I hold close to my heart.</p>
         </section>
@@ -496,7 +507,7 @@
         </section>
 
         <footer>
-            Made with endless love by [Your Name]
+            Made with endless love by <span id="sender-name-display">[Your Name]</span>
         </footer>
     </main>
 
@@ -512,6 +523,8 @@
     <script>
         // --- Variables ---
         let partnerName = "Love";
+        let senderName = "Me";
+        let uploadedPhotos = [];
 
         // --- Initialization ---
         function createParticles() {
@@ -548,17 +561,83 @@
         };
 
         // --- Logic ---
-        function saveName() {
-            const input = document.getElementById('partner-name');
-            if (input.value.trim() !== "") {
-                partnerName = input.value.trim();
-                document.querySelectorAll('.partner-name-display').forEach(el => el.textContent = partnerName);
-                document.getElementById('name-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('name-screen').classList.add('hidden');
-                    document.getElementById('main-content').classList.remove('hidden');
-                    initHero();
-                }, 800);
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            const countDisplay = document.getElementById('file-count');
+
+            if (files.length > 10) {
+                alert("Please select a maximum of 10 photos!");
+                event.target.value = ""; // Clear selection
+                uploadedPhotos = [];
+                countDisplay.textContent = "";
+                return;
+            }
+
+            uploadedPhotos = Array.from(files);
+            countDisplay.textContent = `${uploadedPhotos.length} photo(s) selected`;
+        }
+
+        function saveDetails() {
+            const pNameInput = document.getElementById('partner-name');
+            const sNameInput = document.getElementById('sender-name');
+
+            if (pNameInput.value.trim() !== "") {
+                partnerName = pNameInput.value.trim();
+            }
+
+            if (sNameInput.value.trim() !== "") {
+                senderName = sNameInput.value.trim();
+            }
+
+            // Update Text
+            document.querySelectorAll('.partner-name-display').forEach(el => el.textContent = partnerName);
+            document.getElementById('sender-name-display').textContent = senderName;
+
+            // Render Photos
+            renderMemories();
+
+            // Transition
+            document.getElementById('name-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('name-screen').classList.add('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+                initHero();
+            }, 800);
+        }
+
+        function renderMemories() {
+            const grid = document.getElementById('memory-grid');
+            grid.innerHTML = ""; // Clear existing
+
+            if (uploadedPhotos.length === 0) {
+                // Default Placeholders if no photos uploaded
+                for (let i = 1; i <= 3; i++) {
+                    const card = document.createElement('div');
+                    card.className = "glass-card memory-card fade-in scroll-trigger";
+                    card.style.transitionDelay = `${i * 0.2}s`;
+                    card.innerHTML = `<div class="placeholder-img">Photo ${i}</div>`;
+                    grid.appendChild(card);
+                    observer.observe(card);
+                }
+            } else {
+                uploadedPhotos.forEach((file, index) => {
+                    const url = URL.createObjectURL(file);
+                    const card = document.createElement('div');
+                    card.className = "glass-card memory-card fade-in scroll-trigger";
+                    card.style.transitionDelay = `${index * 0.1}s`;
+
+                    // Create Image Element
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.width = "100%";
+                    img.style.height = "100%";
+                    img.style.objectFit = "cover";
+                    img.style.borderRadius = "10px";
+
+                    card.appendChild(img);
+                    grid.appendChild(card);
+                    observer.observe(card);
+                });
             }
         }
 
